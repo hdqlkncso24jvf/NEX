@@ -3,8 +3,8 @@
 This repository is the official code of "**Global and Local Explanations for Negative GNN Predictions**".
 
 * The **full version** of the paper can be accessed at this file: [`paper_full_version.pdf`](https://github.com/hdqlkncso24jvf/NEX/blob/main/paper_full_version.pdf)
-* Backup link 1: [`paper_full_version.pdf`](https://mxieaa.github.io/paper/paper_full_version.pdf)
-* Backup link 2: [`paper_full_version.pdf`](https://drive.google.com/open?id=1-0gUvQJiyo_EQ4jFOP1y9Iap7OHOUuQY&usp=drive_copy)
+* * Backup link 1: [`paper_full_version.pdf`](https://mxieaa.github.io/paper/paper_full_version.pdf)
+* * Backup link 2: [`paper_full_version.pdf`](https://drive.google.com/file/d/18jn72YUrE2suYVpYh-KzQLLfKxambBLo/view?usp=drive_link)
 
 * The **model checkpoints and dataset** are available at this link: https://drive.google.com/drive/folders/1Cu9WXhRAq-8J4ZBd2REHG9fep4mzLTg8?usp=drive_link.
 
