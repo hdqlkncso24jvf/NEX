@@ -1,12 +1,14 @@
 # Overview
 
-![Architecture](https://github.com/hdqlkncso24jvf/NEX/blob/main/arc.png)
-
-![Exp](https://github.com/hdqlkncso24jvf/NEX/blob/main/exp.png)
-
 This repository is the official code of "**Global and Local Explanations for Negative GNN Predictions**".
 
-This paper studies explanations for graph neural network (GNN) classifiers M when M makes a negative prediction, such as loan denials, paper rejections, or declined job applications. The objective is to both (a) globally explain the general behavior of M; and (b) suggest counterfactual explanations locally at a vertex 𝑢 in a graph, which are necessary changes to features/topology around 𝑢 for M to swap its prediction at 𝑢. We propose a class of rules which treat negative M-predictions as their consequences. We develop algorithms to (a) learn such rules as global explanations and (b) compute local counterfactual explanations, by applying the learned rules. Over real-life graphs, our algorithms are on average 70.16% and 189.68% higher in recognizability and reliability than prior global methods, and 33.60% and 3.25× better than previous local (counterfactual) methods in fidelity and sparsity, respectively.
+This paper studies explanations for graph neural network (GNN) classifiers M when M makes a negative prediction, such as loan denials, paper rejections, or declined job applications. The objective is to both (a) globally explain the general behavior of M; and (b) suggest counterfactual explanations locally at a vertex 𝑢 in a graph, which are necessary changes to features/topology around 𝑢 for M to swap its prediction at 𝑢. We propose a class of rules which treat negative M-predictions as their consequences. 
+
+![Architecture](https://github.com/hdqlkncso24jvf/NEX/blob/main/architecture.png)
+
+We develop algorithms to (a) learn such rules as global explanations and (b) compute local counterfactual explanations, by applying the learned rules. Over real-life graphs, our algorithms are on average 70.16% and 189.68% higher in recognizability and reliability than prior global methods, and 33.60% and 3.25× better than previous local (counterfactual) methods in fidelity and sparsity, respectively.
+
+![Exp](https://github.com/hdqlkncso24jvf/NEX/blob/main/exp.png)
 
 * The **full version** of the paper can be accessed at this file: [`paper_full_version.pdf`](https://github.com/hdqlkncso24jvf/NEX/blob/main/paper_full_version.pdf)
   * [BACKUP Link 1](https://mxieaa.github.io/paper/paper_full_version.pdf)
