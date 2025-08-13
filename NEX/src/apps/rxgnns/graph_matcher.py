@@ -1,6 +1,5 @@
 from copy import deepcopy
 
-
 class Node:
     def __init__(self, id, label, attributes=None):
         self.id = id

@@ -7,7 +7,6 @@ from sklearn.cluster import KMeans
 from graph_matcher import Matcher
 from graph_matcher import Graph, Node, AttributeComparisonPredicate, Pattern, WLPredicate, AttributePredicate, RxGNNs
 
-
 class CounterfactualExplainer:
 
     def __init__(self, threshold=5, alpha=0.5, lambda_factor=1000.0, max_iterations=3, num_clusters=5):

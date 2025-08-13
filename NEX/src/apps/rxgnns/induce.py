@@ -52,6 +52,7 @@ class GNNModel(nn.Module):
                     nn.ReLU()
                 )))
 
+
         self.classifier = nn.Sequential(
             nn.Linear(hidden_dim * 2, hidden_dim),
             nn.ReLU(),
