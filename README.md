@@ -2,7 +2,7 @@
 
 ![Architecture](https://github.com/hdqlkncso24jvf/NEX/blob/main/arc.png)
 
-![Exp](https://github.com/hdqlkncso24jvf/NEX/blob/main/arc.png)
+![Exp](https://github.com/hdqlkncso24jvf/NEX/blob/main/exp.png)
 
 This repository is the official code of "**Global and Local Explanations for Negative GNN Predictions**".
 
