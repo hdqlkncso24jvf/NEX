@@ -1,13 +1,16 @@
 # Overview
 
+![Architecture](https://github.com/hdqlkncso24jvf/NEX/blob/main/arc.png)
+
 This repository is the official code of "**Global and Local Explanations for Negative GNN Predictions**".
 
-* The **full version** of the paper can be accessed at this file: 
-  * [`paper_full_version.pdf`](链接地址)
-  * 12
-  * 2
+This paper studies explanations for graph neural network (GNN) classifiers M when M makes a negative prediction, such as loan denials, paper rejections, or declined job applications. The objective is to both (a) globally explain the general behavior of M; and (b) suggest counterfactual explanations locally at a vertex 𝑢 in a graph, which are necessary changes to features/topology around 𝑢 for M to swap its prediction at 𝑢. We propose a class of rules which treat negative M-predictions as their consequences. We develop algorithms to (a) learn such rules as global explanations and (b) compute local counterfactual explanations, by applying the learned rules. Over real-life graphs, our algorithms are on average 70.16% and 189.68% higher in recognizability and reliability than prior global methods, and 33.60% and 3.25× better than previous local (counterfactual) methods in fidelity and sparsity, respectively.
 
-* The **model checkpoints and dataset** are available at this link: https://drive.google.com/drive/folders/1Cu9WXhRAq-8J4ZBd2REHG9fep4mzLTg8?usp=drive_link.
+* The **full version** of the paper can be accessed at this file: [`paper_full_version.pdf`](https://github.com/hdqlkncso24jvf/NEX/blob/main/paper_full_version.pdf)
+  * [BACKUP Link 1](https://mxieaa.github.io/paper/paper_full_version.pdf)
+  * [BACKUP Link 2](https://drive.google.com/file/d/18jn72YUrE2suYVpYh-KzQLLfKxambBLo/view?usp=drive_link)
+  
+* The **model checkpoints and dataset** are available at this link: [Google Drive](https://drive.google.com/drive/folders/1Cu9WXhRAq-8J4ZBd2REHG9fep4mzLTg8?usp=drive_link)
 
 ## Software requirements
 
@@ -52,8 +55,6 @@ For fine-tuning large language models ranging from 1.5B to 9B parameters, a mini
 For fine-tuning models larger than 13B parameters, at least one V100 GPU is necessary, with a recommended GPU Memory of at least 32GB per card.
 
 ## Run
-
-### Language Model Deploy
 
 ```shell
 python main.py train train.yaml
@@ -135,10 +136,6 @@ Once the inference of the large language model is completed, you will receive a 
 
 For the convenience of other developers, this project has already pre-completed the inference process and the feature generation process of the LLM. In the `dataset_name_filled.json` file under the LLM folder of each dataset, there are pseudo-labels for rough classification and keywords for feature generation, which have been inferred by the fine-tuned LLM. In the GNN folder of each dataset, the `feature_{keywords_num}.pth` contains the initial embeddings using SimCSE.
 
-# LMiner
-
-The `LMiner` folder contains code for run miner algorithm in level-wise mode.
-
 ## Installing dependencies on Ubuntu
 
 GCC version: 7.4.0 or above, support of c++17 standard required.
@@ -207,7 +204,9 @@ The others are same as discovery.
 
 The main loop of raw level-wise discovery can be found in folder LMiner/src/apps/rule_discover/, and the main loop of LR match, pattern matching can be found in folder LMiner/src/apps/rule_match/.
 
-The ER folder contains code for computing 1-WL, where you can employ any feature (such as SimCSE or GloVe) embedding to determine whether a pair of points, as well as all pairs within a graph. Detailed running examples can be viewed within this folder. 
+The ER folder contains code for computing 1-WL, where you can employ any feature (such as SimCSE or GloVe) embedding to determine whether a pair of points, as well as all pairs within a graph. 
+
+Detailed running examples can be viewed within this folder. 
 
 If you want to run LR discovery algorithm, you may need to fill a yaml file in this format:
 
@@ -297,34 +296,241 @@ PatternPath:
 TimeLogFile: time log file
 ```
 
-# RxGNNs
+## Literal CSV format
 
-**Quick Start Guide**
+### Literals
 
-The RxGNNs framework provides two main components for explainable GNN predictions:
+| type | x_id | x_attr | y_id | y_attr | edge_label |  c   |
+| :--: | :--: | :----: | :--: | :----: | :--------: | :--: |
+
+Different kinds of literals would use different columns.
+
+### Attribute literal
+
+Format:
+
+|   type    | x_id | x_attr | y_id | y_attr | edge_label |  c   |
+| :-------: | :--: | :----: | :--: | :----: | :--------: | :--: |
+| Attribute |  x   |   A    |  -   |   -    |     -      |  -   |
+
+Semantics:
+
+```
+x.A
+```
+
+Vertex *x* has attribute *A*.
+
+### Variable literal
+
+Format:
+
+|   type   | x_id | x_attr | y_id | y_attr | edge_label |  c   |
+| :------: | :--: | :----: | :--: | :----: | :--------: | :--: |
+| Variable |  x   |   A    |  y   |   B    |     -      |  -   |
+
+Semantics:
+
+```
+x.A = y.B
+```
+
+The attribute *A* of *x* is the same as attribute *B* of *y*.
+
+### Constant literal
+
+Format:
+
+|   type   | x_id | x_attr | y_id | y_attr | edge_label |  c   |
+| :------: | :--: | :----: | :--: | :----: | :--------: | :--: |
+| Constant |  x   |   A    |  -   |   -    |     -      |  c   |
+
+Semantics:
+
+```
+x.A = c
+```
+
+The attribute *A* of *x* is equal to *c*.
+
+More detailly, the data type of *c* in constant literal needs to be specified as the following example:
+
+> |   type   | x_id | x_attr | y_id | y_attr | edge_label |        c        |
+> | :------: | :--: | :----: | :--: | :----: | :--------: | :-------------: |
+> | Constant |  4   | genres |  -   |   -    |     -      | \|Comedy;string |
+
+Which specifies that the attribute *genres* of vertex with id *4* is equal to *|Comedy* in string.
+
+### Edge literal
+
+Format:
+
+| type | x_id | x_attr | y_id | y_attr | edge_label |  c   |
+| :--: | :--: | :----: | :--: | :----: | :--------: | :--: |
+| Edge |  x   |   -    |  y   |   -    |     l      |  -   |
+
+Semantics:
+
+```
+x -(l)-> y
+```
+
+There is an edge with label *l* from vertex *x* to *y*.
+
+### ML literal
+
+Format:
+
+| type | x_id | x_attr | y_id | y_attr | edge_label |  c   |
+| :--: | :--: | :----: | :--: | :----: | :--------: | :--: |
+|  Ml  |  x   |   -    |  y   |   -    |     l      |  -   |
+
+Semantics:
+
+```
+x - ml(l) -> y
+```
+
+The ML model can predict an edge with label *l* from vertex *x* to *y*.
+
+## Set of literals
+
+The above *literal format* allow users to store multiply literals in the same file, and the *literal set format* further allows to divide the literals into different sets by an additional column *gar_id* :
+
+| type | x_id | x_attr | y_id | y_attr | edge_label |  c   | **gar_id** |
+| :--: | :--: | :----: | :--: | :----: | :--------: | :--: | :--------: |
+
+As an example, the following example shows that there are two literals in the *example_x.csv*:
+
+> |   type   | x_id | x_attr | y_id | y_attr | edge_label |  c   |
+> | :------: | :--: | :----: | :--: | :----: | :--------: | :--: |
+> | Constant |  x   |   A    |  -   |   -    |     -      |  c   |
+> |   Edge   |  x   |   -    |  y   |   -    |     l      |  -   |
+
+By adding the additional column *gar_id*, the following *example_x_set.csv* represent there are two single literal:
+
+> |   type   | x_id | x_attr | y_id | y_attr | edge_label |  c   | gar_id |
+> | :------: | :--: | :----: | :--: | :----: | :--------: | :--: | :----: |
+> | Constant |  x   |   A    |  -   |   -    |     -      |  c   |   0    |
+> |   Edge   |  x   |   -    |  y   |   -    |     l      |  -   |   1\   |
+
+[head file](/include/gar/csv_gar.h):
+
+```
+/include/gar/csv_gar.h
+```
+
+## CSV file format
+
+Both a single GAR and a set of GARs are stored in four files seperately:
+
+* v.csv / v_set.csv
+
+  > The vertexes of Gar / Gar set, see [csv format of graph](/include/gundam/doc/user_doc/csv_format.md) in GUNDAM.
+
+* e.csv / e_set.csv
+
+  > The edges of Gar / Gar set, see [csv format of graph](/include/gundam/doc/user_doc/csv_format.md) in GUNDAM.
+
+* x.csv / x_set.csv
+
+  > The set of literals contained in X of Gar / Gar set, see [csv format of literal](/doc/user_doc/literal_csv_format.md).
+
+* y.csv / y_set.csv
+
+  > The set of literals contained in Y of Gar / Gar set, see [csv format of literal](/doc/user_doc/literal_csv_format.md).
+
+## Useful method
+
+### Read
+
+```c++
+template <typename PatternType, typename DataGraphType>
+int ReadGAR(GraphAssociationRule<PatternType, DataGraphType> &gar,
+            const std::string &v_file, const std::string &e_file,
+            const std::string &x_file, const std::string &y_file);
+```
+
+### ReadSet
+
+```c++
+template <typename PatternType, typename DataGraphType>
+int ReadGARSet(
+    std::vector<GraphAssociationRule<PatternType, DataGraphType>> &gar_set,
+    const std::string &v_set_file, const std::string &e_set_file,
+    const std::string &x_set_file, const std::string &y_set_file);
+
+template <typename PatternType, typename DataGraphType>
+int ReadGARSet(
+    std::vector<GraphAssociationRule<PatternType, DataGraphType>> &gar_set,
+    std::vector<std::string> &gar_name_set, 
+    const std::string &v_set_file, const std::string &e_set_file, 
+    const std::string &x_set_file, const std::string &y_set_file);
+```
+
+### Write
+
+```c++
+template <typename PatternType, typename DataGraphType>
+int WriteGAR(
+    const GraphAssociationRule<PatternType, DataGraphType> &gar,
+    const std::string &v_file, const std::string &e_file,
+    const std::string &x_file, const std::string &y_file);
+```
+
+### WriteSet
+
+```c++
+template <typename PatternType, typename DataGraphType>
+int WriteGARSet(
+    const std::vector<GraphAssociationRule<PatternType, DataGraphType>> &gar_set,
+    const std::string &v_file, const std::string &e_file,
+    const std::string &x_file, const std::string &y_file);
+
+template <typename PatternType, typename DataGraphType>
+int WriteGARSet(
+    const std::vector<GraphAssociationRule<PatternType, DataGraphType>> &gar_set,
+    const std::vector<std::string> &gar_name_list, 
+    const std::string &v_file, const std::string &e_file, 
+    const std::string &x_file, const std::string &y_file);
+```
+
+#### RxGNNs
 
 ```python
-from miner import RuleDiscovery, PatternComposer, PredicateSelector
+#!/usr/bin/env python3
+"""
+NEX: Quick Start Example
+A minimal example demonstrating rule discovery using the NEX framework
+"""
 
-# Initialize the rule discovery with basic configuration
-rule_miner = RuleDiscovery(
-    data_graph,                      # Your input graph
-    motifs=None,                     # Optional pre-defined motifs (auto-generated if None)
-    support_threshold=5,             # Minimum support for rules
-    confidence_threshold=0.5,        # Minimum confidence for rules
-    max_verification_time=50,        # Time limit for rule verification
-    max_pattern_combinations=3,      # Limit for pattern composition
-    sample_ratio=0.1                 # Sampling ratio for large graphs
+import pickle
+from graph_matcher import Graph, Node
+
+miner = RuleDiscovery(
+    data_graph=data_graph,
+    support_threshold=5,
+    confidence_threshold=0.6,
+    gnn_model_type='GCN',
+    dataset_name='loan',
+    sample_ratio=0.01,  # Use 1% sample for faster execution
+    max_verification_time=30
 )
 
-# Discover explanatory rules
-discovered_rules = rule_miner.discover(num_threads=4)
+# Discover rules using parallel mining
+discovered_rules = miner.discover(num_threads=2)
 
-# Access discovered rules
-for rule in discovered_rules:
-    print(f"Rule pattern has {len(rule.pattern.graph.nodes)} nodes")
-    print(f"Rule has {len(rule.preconditions)} preconditions")
+# Display results
+print(f"Discovered {len(discovered_rules)} rules")
+for i, rule in enumerate(discovered_rules[:3]):  # Show first 3 rules
+    print(f"Rule {i+1}: {rule.description()}")
 ```
+
+This example demonstrates how to use the NEX rule discovery framework in just a few lines of code. 
+
+First, we load a pre-processed graph dataset from a pickle file, which should contain nodes with attributes including GNN predictions. Then we instantiate the RuleDiscovery class with essential parameters including support and confidence thresholds, the GNN model type (GCN in this case), and a small sampling ratio to speed up the mining process for demonstration purposes. 
+
+The core mining operation is performed by calling the discover() method with parallel threading enabled, which automatically generates initial motifs through random walks, applies the DQN-based pattern composition strategy, and performs level-wise rule mining to find logical rules that correlate graph patterns with GNN predictions. Finally, we output the discovered rules in human-readable format, where each rule represents a logical implication from graph structural patterns and node attributes to prediction outcomes. 
 
 **Counterfactual Explanation**
 
@@ -363,15 +569,28 @@ When the system encounters a predicate like `x0.debt_to_income ≥ 40%`, it tran
 
 ```python
 def calculate_ppl(self, predicate, pattern):
-    natural_language = self._predicate_to_natural_language(predicate, pattern)
-    prompt = self.prompt_template.format(rule=natural_language)
-    
-    # LLM perplexity calculation
-    encodings = self.tokenizer(prompt, return_tensors="pt").to(device)
-    outputs = self.model(input_ids=encodings.input_ids, attention_mask=encodings.attention_mask)
-    neg_log_likelihood = outputs.loss.item()
-    
-    return np.exp(neg_log_likelihood)
+    pred_key = predicate.description() if hasattr(predicate, 'description') else str(predicate)
+
+    if pred_key in self.ppl_cache:
+        return self.ppl_cache[pred_key]
+
+    ppl_value = None
+
+    if self.use_llm and not self.llm_failed:
+        ppl_value = self._calculate_llm_ppl(predicate, pattern, pred_key)
+
+    if ppl_value is None:
+        if self.fallback_strategy == 'support_based':
+            ppl_value = self._calculate_support_based_score(predicate, pattern)
+        elif self.fallback_strategy == 'frequency_based':
+            ppl_value = self._calculate_frequency_based_score(predicate, pattern)
+        else:  # random
+            ppl_value = random.randint(1, 100)
+
+        print(f"Using fallback strategy '{self.fallback_strategy}' for predicate: {pred_key[:50]}...")
+
+    self.ppl_cache[pred_key] = ppl_value
+    return ppl_value
 ```
 
 Lower perplexity scores indicate predicates that the language model finds more coherent and plausible for explaining negative predictions. These scores are used to prioritize predicates during rule discovery, ensuring that the resulting explanations align with human intuition about what constitutes a good explanation.
@@ -384,13 +603,17 @@ The DQN learns to select actions that maximize long-term rewards by balancing pa
 
 ```python
 def get_reward(self, old_pattern, new_pattern):
-    old_confidence = self.matcher.get_pattern_confidence(old_pattern)
-    new_confidence = self.matcher.get_pattern_confidence(new_pattern)
-    
-    confidence_change = new_confidence - old_confidence
-    support_change = (new_support - old_support) / max(1, old_support)
-    
-    return confidence_change + 0.1 * support_change
+   old_support = self.matcher.get_pattern_support(old_pattern)
+   new_support = self.matcher.get_pattern_support(new_pattern)
+
+   old_confidence = self.matcher.get_pattern_confidence(old_pattern)
+   new_confidence = self.matcher.get_pattern_confidence(new_pattern)
+
+   confidence_change = new_confidence - old_confidence
+   support_change = (new_support - old_support) / max(1, old_support)
+   reward = confidence_change + 0.1 * support_change
+
+   return reward
 ```
 
 The system employs standard RL techniques like experience replay and target networks to stabilize learning. During inference, the trained model selects the optimal vertex pairs to merge or decides to terminate the composition process. This approach allows the system to generate high-quality patterns without exhaustive enumeration, making it tractable for large graphs.
