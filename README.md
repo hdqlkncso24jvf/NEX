@@ -2,7 +2,11 @@
 
 This repository is the official code of "**Global and Local Explanations for Negative GNN Predictions**".
 
-* The **full version** of the paper can be accessed at this file: `paper_full_version.pdf`
+* The **full version** of the paper can be accessed at this file: 
+  * [`paper_full_version.pdf`](链接地址)
+  * 12
+  * 2
+
 * The **model checkpoints and dataset** are available at this link: https://drive.google.com/drive/folders/1Cu9WXhRAq-8J4ZBd2REHG9fep4mzLTg8?usp=drive_link.
 
 ## Software requirements
