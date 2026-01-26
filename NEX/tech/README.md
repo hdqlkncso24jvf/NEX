@@ -12,8 +12,7 @@ We develop algorithms to (a) learn such rules as global explanations and (b) com
 
 * The **full version** of the paper can be accessed at this file: [`paper_full_version.pdf`](https://github.com/hdqlkncso24jvf/NEX/blob/main/paper_full_version.pdf)
   * [BACKUP Link 1](https://mxieaa.github.io/paper/paper_full_version.pdf)
-  * [BACKUP Link 2](https://drive.google.com/file/d/18jn72YUrE2suYVpYh-KzQLLfKxambBLo/view?usp=drive_link)
-  
+  * [BACKUP Link 2](https://drive.google.com/file/d/15B-96yfgQ8VshvRoE_MyW9xdicuLr4np/view?usp=sharing)
 * The **model checkpoints and dataset** are available at this link: [Google Drive](https://drive.google.com/drive/folders/1Cu9WXhRAq-8J4ZBd2REHG9fep4mzLTg8?usp=drive_link)
 
 ## Software requirements
